@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 from app import app
 import subprocess
 
@@ -22,9 +22,7 @@ def index():
 @app.route("/login/", methods=['GET','POST'])
 def login():
     if request.method == 'POST':
-        name = request.form['login']
-        password = request.form['password']
-        return redirect(url_for('test', name=name, password=password))
+        return redirect(url_for('test', name=name, password=password), code=307)
     else:
         return render_template('login.html')
 
@@ -37,5 +35,5 @@ def test():
     a = subprocess.Popen(input, stdout = subprocess.PIPE,
                             stderr=subprocess.PIPE,
                            stdin=subprocess.PIPE)
-    out = a.communicate()
-    return out
+    stdout, stderr = a.communicate()
+    return stdout
