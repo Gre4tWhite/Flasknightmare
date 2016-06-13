@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% if title %}
+        <title> {{ title }} - TAPP </title>
+        {% else %}
+        <title>Welcome to TAPP</title>
+        {% endif %}
+    </head>
+    <body>
+        <div class="menu_bar">
+            TAPP: <a href="/index">Home</a>
+        </div>
+    {% block content %} {% endblock %}
+    </body>
+</html>
