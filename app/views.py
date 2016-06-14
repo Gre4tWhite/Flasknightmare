@@ -9,40 +9,19 @@ MUTALISK_DATA = 'http://mutalisk.battle.net/api/data?'
 MUTALISK_EC = 'http://mutalisk.battle.net/api/eventConfirm?'
 
 @app.route('/')
-@app.route('/index')
+@app.route('/index', methods=['GET', 'POST'])
 def index():
-    user = {'nickname': 'Dr. Evil'} # fake user
-    posts = [  # fake array of posts
-        {
-            'author': {'nickname': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'nickname': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', user=user, posts=posts)
-
-
-@app.route("/login/", methods=['GET','POST'])
-def login():
     if request.method == 'POST':
         return redirect(url_for('test', name=name, password=password), code=307)
     else:
-        return render_template('login.html')
+        return render_template('index.html')
 
 
 @app.route("/test/", methods=['POST'])
 def test():
 
-
     name = request.form['login']
     password = request.form['password']
-    ##a = subprocess.Popen(input, stdout = subprocess.PIPE,
-    #                        stderr=subprocess.PIPE,
-    #                       stdin=subprocess.PIPE)
-    #stdout, stderr = a.communicate()
     cookie = ""
     realm = 'Battle.net'
     logon_url = 'http://admin.battle.net/logon'
