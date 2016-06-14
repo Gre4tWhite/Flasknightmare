@@ -4,6 +4,7 @@ import subprocess
 import urllib
 import urllib2
 import json
+from pprint import pprint
 
 MUTALISK_DATA = 'http://mutalisk.battle.net/api/data?'
 MUTALISK_EC = 'http://mutalisk.battle.net/api/eventConfirm?'
@@ -15,7 +16,6 @@ def index():
         return redirect(url_for('test', name=name, password=password), code=307)
     else:
         return render_template('index.html')
-
 
 @app.route("/test/", methods=['POST'])
 def test():
@@ -53,14 +53,21 @@ def test():
             socket.close()
         except:
             pass
-
-    query = {'filter':'^US1-WOW-60-GAME01$','type': 'Entities', 'event':'Restart', 'to':'Service', 'location':'false'}
-    mutalisk_url = MUTALISK_EC + urllib.urlencode(query)
-    result = json.load(urllib2.urlopen(urllib2.Request(url=mutalisk_url, headers=cookie)))
-    #print result
-    string = ""
-    if result['errors'] and "Access Denied" in result['errors'][0]:
-        string = str(result['errors'][0])
+    a = "success"
+    if a == "success":
+        return render_template('realms.html')
     else:
-        string = name + " successfully rebooted US1-WOW-60-GAME01"
-    return string
+        return "error"
+
+#    query = {'filter':'^US1-WOW-60-GAME01$','type': 'Entities', 'event':'Restart', 'to':'Service', 'location':'false'}
+#    mutalisk_url = MUTALISK_EC + urllib.urlencode(query)
+#    result = json.load(urllib2.urlopen(urllib2.Request(url=mutalisk_url, headers=cookie)))
+    #print result
+#    string = ''
+#    if result['errors'] and "Access Denied" in result['errors'][0]:
+#        string = str(result['errors'][0])
+#    else:
+#        for something in result:
+#            if something == 'result':
+#                string = result[something]
+#    return string
