@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, Response
+from flask import render_template, request, redirect, url_for, Response, session
 from app import app
 import subprocess
 import urllib
@@ -9,16 +9,17 @@ from pprint import pprint
 MUTALISK_DATA = 'http://mutalisk.battle.net/api/data?'
 MUTALISK_EC = 'http://mutalisk.battle.net/api/eventConfirm?'
 
+
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        return redirect(url_for('test', name=name, password=password), code=307)
+        return redirect(url_for('auth', name=name, password=password), code=307)
     else:
         return render_template('index.html')
 
-@app.route("/test/", methods=['POST'])
-def test():
+@app.route("/auth/", methods=['POST'])
+def auth():
 
     name = request.form['login']
     password = request.form['password']
@@ -53,21 +54,22 @@ def test():
             socket.close()
         except:
             pass
-    a = "success"
-    if a == "success":
-        return render_template('realms.html')
-    else:
-        return "error"
 
-#    query = {'filter':'^US1-WOW-60-GAME01$','type': 'Entities', 'event':'Restart', 'to':'Service', 'location':'false'}
-#    mutalisk_url = MUTALISK_EC + urllib.urlencode(query)
-#    result = json.load(urllib2.urlopen(urllib2.Request(url=mutalisk_url, headers=cookie)))
+    session['cookie'] = cookie
+
+    return render_template('realms.html', cookie=cookie)
+
+@app.route("/realms/", methods=['GET', 'POST'])
+def realms():
+
+    query = {'filter':'^US1-WOW-60-GAME01$','type': 'Entities', 'event':'Restart', 'to':'Service', 'location':'false'}
+    mutalisk_url = MUTALISK_EC + urllib.urlencode(query)
+    result = json.load(urllib2.urlopen(urllib2.Request(url=mutalisk_url, headers=session['cookie'])))
     #print result
-#    string = ''
-#    if result['errors'] and "Access Denied" in result['errors'][0]:
-#        string = str(result['errors'][0])
-#    else:
-#        for something in result:
-#            if something == 'result':
-#                string = result[something]
-#    return string
+    string = ''
+    if result['errors'] and "Access Denied" in result['errors'][0]:
+        string = str(result['errors'][0])
+    else:
+        string = str(result['result']['events'][0]['entity'])
+
+    return string
