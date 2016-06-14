@@ -57,7 +57,7 @@ def auth():
 
     session['cookie'] = cookie
 
-    return render_template('realms.html', cookie=cookie)
+    return render_template('realms.html')
 
 @app.route("/realms/", methods=['GET', 'POST'])
 def realms():
