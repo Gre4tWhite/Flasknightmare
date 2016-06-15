@@ -59,10 +59,24 @@ def auth():
 
     return render_template('realms.html')
 
-@app.route("/realms/", methods=['GET', 'POST'])
+@app.route("/realms/", methods=['POST'])
 def realms():
+    filters = ''
 
-    query = {'filter':'^US1-WOW-60-GAME01$','type': 'Entities', 'event':'Restart', 'to':'Service', 'location':'false'}
+    if request.form.get('option') == 'US':
+        filters = '^US1-WOW-60-GAME01$'
+    elif request.form.get('option') == 'EU':
+        filters = '^EU5-WOW-01-GAME01$'
+    elif request.form.get('option') == 'KR/TW':
+        filters = '^KR1-WOW-02-GAME01$'
+    elif request.form.get('option') == 'KR':
+        filters = '^KR1-WOW-44-GAME02$'
+    elif request.form.get('option') == 'TW':
+        filters = '^TW4-WOW-02-GAME01$'
+    else:
+        filters = '^CN11-WOW-82-GAME09$'
+
+    query = {'filter': filters,'type': 'Entities', 'event':'Restart', 'to':'Service', 'location':'false'}
     mutalisk_url = MUTALISK_EC + urllib.urlencode(query)
     result = json.load(urllib2.urlopen(urllib2.Request(url=mutalisk_url, headers=session['cookie'])))
     #print result

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<form action="/realms/" method="POST">
-    <button name="option" class="realm_button"> US </button>
-    <button name="option" class="realm_button"> EU </button>
-    <button name="option" class="realm_button"> KR/TW </button>
-    <button name="option" class="realm_button"> KR </button>
-    <button name="option" class="realm_button"> TW </button>
-    <button name="option" class="realm_button"> CN </button>
+<form action="/realms/" method='POST'>
+    <button name="option" class="realm_button" value='US'> US </button>
+    <button name="option" class="realm_button" value='EU'> EU </button>
+    <button name="option" class="realm_button" value='KR/TW'> KR/TW </button>
+    <button name="option" class="realm_button" value='KR'> KR </button>
+    <button name="option" class="realm_button" value='TW'> TW </button>
+    <button name="option" class="realm_button" value='CN'> CN </button>
 </form>
 {% endblock %}
