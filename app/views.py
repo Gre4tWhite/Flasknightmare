@@ -61,25 +61,36 @@ def auth():
 
 @app.route("/realms/", methods=['POST'])
 def realms():
-    filters = ''
+    def print_filters(x):
+        with open('app/static/filters.json') as data:
+            json_data = json.load(data)
+            for region in json_data:
+                if region == x:
+                    output_from_func = region + ' batches to be restarted:' + '<br>'
+                    for i in range(1, len(json_data[x]['Restart']) + 1):
+                        for filter in json_data[x]['Restart']['Batch ' + str(i)]:
+                            y = "Batch " + str(i) + ": " + filter + '<br>'
+                            output_from_func += y
+                    return output_from_func
 
     if request.form.get('option') == 'US':
-        filters = '^US1-WOW-60-GAME01$'
+        output = print_filters('US')
     elif request.form.get('option') == 'EU':
-        filters = '^EU5-WOW-01-GAME01$'
+        output = print_filters('EU')
     elif request.form.get('option') == 'KR/TW':
-        filters = '^KR1-WOW-02-GAME01$'
+        output = print_filters('KR/TW')
     elif request.form.get('option') == 'KR':
-        filters = '^KR1-WOW-44-GAME02$'
+        output = print_filters('KR')
     elif request.form.get('option') == 'TW':
-        filters = '^TW4-WOW-02-GAME01$'
+        output = print_filters('TW')
     else:
-        filters = '^CN11-WOW-82-GAME09$'
+        output = 'Idk man, try again'
 
-    query = {'filter': filters,'type': 'Entities', 'event':'Restart', 'to':'Service', 'location':'false'}
+    return render_template('realms.html', output=output)
+
+'''    query = {'filter': filters,'type': 'Entities', 'event':'Restart', 'to':'Service', 'location':'false'}
     mutalisk_url = MUTALISK_EC + urllib.urlencode(query)
     result = json.load(urllib2.urlopen(urllib2.Request(url=mutalisk_url, headers=session['cookie'])))
-    #print result
     string = ''
     if result['errors'] and "Access Denied" in result['errors'][0]:
         string = str(result['errors'][0])
@@ -87,3 +98,4 @@ def realms():
         string = str(result['result']['events'][0]['entity'])
 
     return string
+'''
