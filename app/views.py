@@ -83,9 +83,9 @@ def realms():
                 else:
                     yield "Waiting 5 minutes <br><br>"
                 time.sleep(5)
-            if region == 'CN':
-                yield "5 minutes remaining <br><br>"
-                time.sleep(5)
+                if region == 'CN':
+                    yield "5 minutes remaining <br><br>"
+                    time.sleep(5)
 
 
     def restart(batch_num ,filter):
